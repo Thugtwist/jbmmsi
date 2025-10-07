@@ -761,6 +761,8 @@ footer {
   background-color: rgba(0, 0, 0, 0.5);
   align-items: center;
   justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .modal.active {
@@ -772,8 +774,10 @@ footer {
   padding: 30px;
   border-radius: 10px;
   box-shadow: var(--shadow);
-  width: 90%;
+  width: 100%;
   max-width: 500px;
+  max-height: 90vh; /* Add max height */
+  overflow-y: auto; /* Enable scrolling if content is too tall */
   position: relative;
   animation: modalFade 0.3s;
 }
@@ -798,6 +802,7 @@ footer {
   color: var(--text-light);
   cursor: pointer;
   transition: var(--transition);
+  z-index: 10; /* Ensure close button is above other content */
 }
 
 .close:hover {
@@ -857,6 +862,7 @@ footer {
   border-radius: 5px;
   font-size: 1.6rem;
   transition: var(--transition);
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
 }
 
 .input-with-icon textarea {
@@ -923,6 +929,145 @@ footer {
   text-align: center;
   font-size: 1.4rem;
   color: var(--text-light);
+}
+
+/* Responsive adjustments for different screen sizes */
+@media (max-width: 768px) {
+  .modal {
+    padding: 15px;
+  }
+  
+  .modal-content {
+    padding: 25px 20px;
+    max-height: 95vh; /* Slightly more height on mobile */
+  }
+  
+  .modal-title {
+    font-size: 2.2rem;
+  }
+  
+  .modal-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .modal-icon i {
+    font-size: 3.5rem;
+  }
+  
+  .close {
+    font-size: 2.2rem;
+    top: 12px;
+    right: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 10px;
+  }
+  
+  .modal-content {
+    padding: 20px 15px;
+    border-radius: 8px;
+  }
+  
+  .modal-title {
+    font-size: 2rem;
+  }
+  
+  .modal-subtitle {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+  }
+  
+  .modal-icon i {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    font-size: 1.5rem;
+  }
+  
+  .input-with-icon input, 
+  .input-with-icon textarea {
+    font-size: 1.6rem; /* Prevent zoom on iOS */
+    padding: 14px 15px 14px 45px; /* Slightly taller for touch */
+  }
+  
+  .input-with-icon textarea {
+    min-height: 100px;
+  }
+  
+  .modal-content button[type="submit"] {
+    padding: 14px; /* Larger touch target */
+    font-size: 1.6rem;
+  }
+  
+  .close {
+    font-size: 2rem;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .success-message, 
+  .error-message {
+    font-size: 1.5rem;
+    padding: 12px;
+    margin-top: 1.5rem;
+  }
+  
+  .modal-footer {
+    font-size: 1.3rem;
+    margin-top: 1.5rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .modal-content {
+    padding: 15px 12px;
+  }
+  
+  .modal-title {
+    font-size: 1.8rem;
+  }
+  
+  .modal-subtitle {
+    font-size: 1.3rem;
+  }
+  
+  .input-with-icon input, 
+  .input-with-icon textarea {
+    padding: 12px 12px 12px 40px;
+  }
+  
+  .input-icon {
+    left: 12px;
+  }
+}
+
+/* For very tall modals, ensure content is scrollable */
+@media (max-height: 600px) {
+  .modal-content {
+    max-height: 95vh;
+  }
+  
+  .modal-icon {
+    margin-bottom: 1.5rem;
+  }
+  
+  .modal-subtitle {
+    margin-bottom: 2rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
 }
 
 /* ===== RESPONSIVE STYLES ===== */
