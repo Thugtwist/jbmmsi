@@ -18,13 +18,13 @@ const Programs = ({ openModal }) => {
       title: "Elementary",
       icon: "fas fa-book",
       description: "Focus on Growth & Nurturing. Planting seeds of confidence, kindness, and curiosity in a garden where every child blossoms.",
-      program: "Grade 1-6"
+      program: "Elementary"
     },
      {
-      title: "Junior Highscool",
+      title: "Junior Highschool",
       icon: "fa-solid fa-chalkboard",
       description: "Focus on actively trying to figure out who they are, which leads to exploring different styles, interests, and social groups.",
-      program: "Grade 7-8"
+      program: "Junior Highschool"
     },
      {
       title: "Summer Class",
@@ -39,6 +39,7 @@ const Programs = ({ openModal }) => {
       program: "One On One Tutorial"
     }
   ];
+  
 
   return (
     <section id="programs" className="section programs">

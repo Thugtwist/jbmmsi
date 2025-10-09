@@ -30,6 +30,7 @@ const inquirySchema = new mongoose.Schema({
   email: { type: String, required: true },
   phone: String,
   program: { type: String, required: true },
+  grade: { type: String, required: true },
   message: { type: String, required: true },
   timestamp: { type: Date, default: Date.now }
 });
@@ -46,6 +47,7 @@ app.post('/api/inquiries', async (req, res) => {
       email: req.body.email,
       phone: req.body.phone,
       program: req.body.program,
+      grade: req.body.grade, // Use the grade from request body
       message: req.body.message,
       timestamp: req.body.timestamp || new Date()
     });

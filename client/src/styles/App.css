@@ -160,11 +160,11 @@ header.scrolled {
 .logo-text {
   font-size: 2.4rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--gradient);
 }
 
 .logo-text span {
-  color: var(--secondary);
+  color: blue;
 }
 
 .nav-menu {
@@ -750,42 +750,315 @@ footer {
 }
 
 /* ===== MODAL ===== */
+/* Modal Styles */
 .modal {
-  display: none;
   position: fixed;
-  z-index: 1000;
-  left: 0;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
   justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
 }
 
 .modal.active {
-  display: flex;
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal-content {
-  background-color: var(--white);
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  width: 100%;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 20px;
+  padding: 2.5rem;
+  width: 90%;
   max-width: 500px;
-  max-height: 90vh; /* Add max height */
-  overflow-y: auto; /* Enable scrolling if content is too tall */
+  max-height: 90vh;
+  overflow-y: auto;
   position: relative;
-  animation: modalFade 0.3s;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.05);
+  transform: translateY(30px) scale(0.95);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes modalFade {
+.modal.active .modal-content {
+  transform: translateY(0) scale(1);
+}
+
+/* Close Button */
+.close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 1.5rem;
+  color: #64748b;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: rgba(100, 116, 139, 0.1);
+}
+
+.close:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  transform: rotate(90deg);
+}
+
+/* Modal Header */
+.modal-icon {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-icon i {
+  font-size: 4rem;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  padding: 1rem;
+  border-radius: 50%;
+  background-color: rgba(102, 126, 234, 0.1);
+}
+
+.modal-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.modal-subtitle {
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.80rem;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  z-index: 1;
+  color: #64748b;
+  transition: color 0.3s ease;
+}
+
+.input-with-icon:focus-within .input-icon {
+  color: #667eea;
+}
+
+.input-with-icon input,
+.input-with-icon select,
+.input-with-icon textarea {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1.4rem;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  color: #1e293b;
+}
+
+.input-with-icon input:focus,
+.input-with-icon select:focus,
+.input-with-icon textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.input-with-icon input::placeholder,
+.input-with-icon textarea::placeholder {
+  color: #94a3b8;
+}
+
+.read-only-input {
+  background: #f8fafc !important;
+  color: #64748b !important;
+  cursor: not-allowed;
+}
+
+
+/* Grade Selection */
+.grade-selection {
+  background: rgba(102, 126, 234, 0.05);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.grade-help {
+  color: #64748b;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: 1.80rem 2rem;
+  background: var(--gradient);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.submit-btn:hover::before {
+  left: 100%;
+}
+
+/* Messages */
+.success-message,
+.error-message {
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  display: none;
+}
+
+.success-message.active,
+.error-message.active {
+  opacity: 1;
+  transform: translateY(0);
+  display: block;
+}
+
+.success-message {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.success-message i,
+.error-message i {
+  margin-right: 0.5rem;
+}
+
+/* Modal Footer */
+.modal-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+}
+
+.modal-footer p {
+  color: #94a3b8;
+  font-size: 1.3rem;
+  line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .modal-content {
+    padding: 1.5rem;
+    margin: 1rem;
+    width: calc(100% - 2rem);
+  }
+
+  .modal-title {
+    font-size: 1.5rem;
+  }
+
+  .modal-icon i {
+    font-size: 2.5rem;
+  }
+
+  .grade-selection {
+    padding: 1rem;
+  }
+
+  .input-with-icon input,
+  .input-with-icon select,
+  .input-with-icon textarea {
+    padding: 0.875rem 0.875rem 0.875rem 2.5rem;
+  }
+}
+
+/* Animation for form elements */
+@keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(-50px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -793,142 +1066,42 @@ footer {
   }
 }
 
-.close {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 2.4rem;
-  font-weight: bold;
-  color: var(--text-light);
-  cursor: pointer;
-  transition: var(--transition);
-  z-index: 10; /* Ensure close button is above other content */
+.modal-content > * {
+  animation: slideIn 0.5s ease forwards;
 }
 
-.close:hover {
-  color: var(--dark);
+.modal-content > *:nth-child(1) { animation-delay: 0.1s; }
+.modal-content > *:nth-child(2) { animation-delay: 0.2s; }
+.modal-content > *:nth-child(3) { animation-delay: 0.3s; }
+.modal-content form > * { animation-delay: 0.4s; }
+
+/* Custom select arrow */
+.input-with-icon select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.3rem;
+  padding-right: 3rem;
 }
 
-.modal-icon {
-  text-align: center;
-  margin-bottom: 2rem;
+/* Scrollbar Styling */
+.modal-content::-webkit-scrollbar {
+  width: 6px;
 }
 
-.modal-icon i {
-  font-size: 4rem;
-  color: var(--primary);
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
 }
 
-.modal-title {
-  font-size: 2.4rem;
-  text-align: center;
-  margin-bottom: 1rem;
+.modal-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
 }
 
-.modal-subtitle {
-  text-align: center;
-  font-size: 1.6rem;
-  color: var(--text-light);
-  margin-bottom: 3rem;
-}
-
-.form-group {
-  margin-bottom: 2rem;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.8rem;
-  font-size: 1.6rem;
-  font-weight: 600;
-}
-
-.input-with-icon {
-  position: relative;
-}
-
-.input-icon {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-light);
-}
-
-.input-with-icon input, .input-with-icon textarea {
-  width: 100%;
-  padding: 12px 15px 12px 45px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1.6rem;
-  transition: var(--transition);
-  box-sizing: border-box; /* Ensure padding doesn't affect width */
-}
-
-.input-with-icon textarea {
-  padding-top: 15px;
-  min-height: 120px;
-  resize: vertical;
-}
-
-.input-with-icon input:focus, .input-with-icon textarea:focus {
-  border-color: var(--primary);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-}
-
-.modal-content button[type="submit"] {
-  width: 100%;
-  padding: 12px;
-  background: var(--gradient);
-  color: var(--white);
-  border: none;
-  border-radius: 5px;
-  font-size: 1.6rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.modal-content button[type="submit"]:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-}
-
-.success-message, .error-message {
-  padding: 15px;
-  border-radius: 5px;
-  margin-top: 2rem;
-  text-align: center;
-  display: none;
-  font-size: 1.6rem;
-}
-
-.success-message.active {
-  display: block;
-}
-
-.error-message.active {
-  display: block;
-}
-
-.success-message {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.error-message {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-.modal-footer {
-  margin-top: 2rem;
-  text-align: center;
-  font-size: 1.4rem;
-  color: var(--text-light);
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* Responsive adjustments for different screen sizes */
