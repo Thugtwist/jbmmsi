@@ -9,11 +9,15 @@ import Contact from './components/Contact.jsx';
 import Footer from './components/Footer.jsx';
 import Chatbot from './components/Chatbot.jsx';
 import Modal from './components/Modal.jsx';
+import SchoolsGallery from './components/SchoolsGallery.jsx';
+import NotificationCenter from './components/NotificationCenter.js';
+import { SocketProvider } from './context/SocketContext.js';
+
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState('');
-
+  
 
   const openModal = (program) => {
     setSelectedProgram(program);
@@ -26,10 +30,13 @@ function App() {
   };
 
   return (
+     <SocketProvider>
     <div className="App">
+      <NotificationCenter />
       <Header />
       <Hero />
       <Programs openModal={openModal} />
+        <SchoolsGallery />
       <Announcements />
       <About />
       <Contact />
@@ -41,6 +48,7 @@ function App() {
         selectedProgram={selectedProgram}
       />
     </div>
+    </SocketProvider>
   );
 }
 

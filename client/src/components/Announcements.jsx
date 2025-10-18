@@ -1,34 +1,104 @@
 import React, { useState, useEffect } from 'react';
+import { useAnnouncements } from '../hooks/useAnnouncements.js';
 
 const Announcements = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [loadedImages, setLoadedImages] = useState(new Set());
+  const { announcements, loading, error, isConnected } = useAnnouncements();
 
-  const announcements = [
-    {
-      title: "School Opening 2025",
-      date: "July 2025",
-      description: "We are excited to announce that the new school year will begin on July 15, 2025. Registration is now open for all grade levels.",
-      image: "/img/announcemet1.jpg"
-    },
-    {
-      title: "Summer Enrichment Program",
-      date: "June 2025",
-      description: "Join our summer enrichment program starting June 1st. Activities include arts, sports, and academic enrichment.",
-      image: "/img/announcement2.jpg"
-    }
-  ];
-
+  // Auto-slide effect
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % announcements.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
+    if (announcements.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % announcements.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
   }, [announcements.length]);
+
+  // Preload images for better performance
+  useEffect(() => {
+    announcements.forEach((announcement) => {
+      if (announcement.image && !loadedImages.has(announcement._id)) {
+        const img = new Image();
+        img.src = getImageUrl(announcement.image);
+        img.onload = () => {
+          setLoadedImages(prev => new Set(prev).add(announcement._id));
+        };
+      }
+    });
+  }, [announcements, loadedImages]);
+
+  const getImageUrl = (imagePath) => {
+    // Handle different image URL formats
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    } else if (imagePath.startsWith('/uploads/')) {
+      return `http://localhost:3001${imagePath}`;
+    } else {
+      return `http://localhost:3001/uploads/${imagePath}`;
+    }
+  };
+
+  const getPlaceholderUrl = () => {
+    return `${process.env.PUBLIC_URL}/image/placeholder.jpg`;
+  };
+
+  const handleImageError = (e) => {
+    e.target.src = getPlaceholderUrl();
+  };
+
+  const handleImageLoad = (announcementId) => {
+    setLoadedImages(prev => new Set(prev).add(announcementId));
+  };
 
   const showSlide = (index) => {
     setCurrentSlide(index);
   };
+
+  if (loading) {
+    return (
+      <section id="announcements" className="section announcements">
+        <div className="container">
+          <h2 className="section-title">Recent <span>Announcements</span></h2>
+          <div className="loading">Loading announcements...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section id="announcements" className="section announcements">
+        <div className="container">
+          <h2 className="section-title">Recent <span>Announcements</span></h2>
+          <div className="error-message">
+            Error: {error}
+            <button 
+              onClick={() => window.location.reload()} 
+              className="retry-button"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (announcements.length === 0) {
+    return (
+      <section id="announcements" className="section announcements">
+        <div className="container">
+          <h2 className="section-title">Recent <span>Announcements</span></h2>
+          <div className="no-announcements">
+            No announcements available.
+            {!isConnected && <div className="connection-note">(Real-time updates offline)</div>}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="announcements" className="section announcements">
@@ -39,7 +109,7 @@ const Announcements = () => {
           <div className="announcement-track">
             {announcements.map((announcement, index) => (
               <div 
-                key={index} 
+                key={announcement._id} 
                 className="announcement-slide" 
                 style={{ display: index === currentSlide ? 'flex' : 'none' }}
               >
@@ -49,7 +119,12 @@ const Announcements = () => {
                   <p className="announcement-desc">{announcement.description}</p>
                 </div>
                 <div className="announcement-img">
-                  <img src={announcement.image} alt={announcement.title} />
+                  <img 
+                    src={getImageUrl(announcement.image)}
+                    alt={announcement.title}
+                    onLoad={() => handleImageLoad(announcement._id)}
+                    onError={handleImageError}
+                  />
                 </div>
               </div>
             ))}
