@@ -130,6 +130,42 @@ const schoolSchema = new mongoose.Schema({
 
 const School = mongoose.model('School', schoolSchema);
 
+// ========== REVIEWS SCHEMA & ROUTES ==========
+
+// Define schema for reviews
+const reviewSchema = new mongoose.Schema({
+  name: { 
+    type: String, 
+    required: true,
+    trim: true
+  },
+  rating: { 
+    type: Number, 
+    required: true,
+    min: 1,
+    max: 5
+  },
+  comment: { 
+    type: String, 
+    required: true,
+    trim: true
+  },
+  date: { 
+    type: String, 
+    required: true 
+  },
+  createdAt: { 
+    type: Date, 
+    default: Date.now 
+  },
+  updatedAt: { 
+    type: Date, 
+    default: Date.now 
+  }
+});
+
+const Review = mongoose.model('Review', reviewSchema);
+
 // ========== MONGODB CHANGE STREAMS FOR REAL-TIME UPDATES ==========
 
 async function setupChangeStreams() {
@@ -204,11 +240,37 @@ async function setupChangeStreams() {
       }
     });
 
-    console.log('✅ MongoDB Change Streams activated - watching for database changes');
+    // Watch reviews collection
+    const reviewsChangeStream = Review.watch();
+    reviewsChangeStream.on('change', (change) => {
+      console.log('⭐ MongoDB Change detected in reviews:', change.operationType);
+      
+      switch (change.operationType) {
+        case 'insert':
+          io.emit('review_created', change.fullDocument);
+          break;
+        
+        case 'update':
+          Review.findById(change.documentKey._id)
+            .then(updatedReview => {
+              if (updatedReview) {
+                io.emit('review_updated', updatedReview);
+              }
+            });
+          break;
+        
+        case 'delete':
+          io.emit('review_deleted', { id: change.documentKey._id });
+          break;
+      }
+    });
+
+    console.log('✅ All MongoDB Change Streams activated - watching for database changes');
   } catch (error) {
     console.error('❌ Error setting up Change Streams:', error);
   }
 }
+
 
 // Start change streams after MongoDB connection is established
 db.once('open', () => {
@@ -610,6 +672,159 @@ app.delete('/api/schools/:id', async (req, res) => {
   }
 });
 
+// ========== REVIEWS ROUTES ==========
+
+// Get all reviews
+app.get('/api/reviews', async (req, res) => {
+  try {
+    const reviews = await Review.find().sort({ createdAt: -1 });
+    res.json({ 
+      success: true, 
+      data: reviews,
+      count: reviews.length 
+    });
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error fetching reviews' 
+    });
+  }
+});
+
+// Get single review
+app.get('/api/reviews/:id', async (req, res) => {
+  try {
+    const review = await Review.findById(req.params.id);
+    if (!review) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Review not found' 
+      });
+    }
+    res.json({ success: true, data: review });
+  } catch (error) {
+    console.error('Error fetching review:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error fetching review' 
+    });
+  }
+});
+
+// Create new review
+app.post('/api/reviews', async (req, res) => {
+  try {
+    const { name, rating, comment } = req.body;
+    
+    if (!name || !rating || !comment) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Name, rating, and comment are required' 
+      });
+    }
+
+    const review = new Review({
+      name: name.trim(),
+      rating: parseInt(rating),
+      comment: comment.trim(),
+      date: new Date().toISOString().split('T')[0]
+    });
+
+    const savedReview = await review.save();
+    console.log('Review created successfully:', savedReview._id);
+
+    // Broadcast new review to all clients
+    broadcastToClients('review_created', savedReview);
+    
+    res.status(201).json({ 
+      success: true, 
+      message: 'Review submitted successfully!',
+      data: savedReview 
+    });
+  } catch (error) {
+    console.error('Error creating review:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error creating review: ' + error.message 
+    });
+  }
+});
+
+// Update review
+app.put('/api/reviews/:id', async (req, res) => {
+  try {
+    const { name, rating, comment } = req.body;
+    const updateData = { 
+      name: name.trim(),
+      rating: parseInt(rating),
+      comment: comment.trim(),
+      updatedAt: new Date()
+    };
+
+    const updatedReview = await Review.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedReview) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Review not found' 
+      });
+    }
+
+    console.log('Review updated successfully:', updatedReview._id);
+
+    // Broadcast updated review to all clients
+    broadcastToClients('review_updated', updatedReview);
+
+    res.json({ 
+      success: true, 
+      message: 'Review updated successfully!',
+      data: updatedReview 
+    });
+  } catch (error) {
+    console.error('Error updating review:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error updating review: ' + error.message 
+    });
+  }
+});
+
+// Delete review
+app.delete('/api/reviews/:id', async (req, res) => {
+  try {
+    const deletedReview = await Review.findByIdAndDelete(req.params.id);
+    
+    if (!deletedReview) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Review not found' 
+      });
+    }
+
+    console.log('Review deleted successfully:', deletedReview._id);
+
+    // Broadcast deleted review ID to all clients
+    broadcastToClients('review_deleted', { id: deletedReview._id });
+
+    res.json({ 
+      success: true, 
+      message: 'Review deleted successfully',
+      data: { id: deletedReview._id }
+    });
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error deleting review: ' + error.message 
+    });
+  }
+});
+
 // ========== GENERAL ROUTES ==========
 
 // Health check endpoint
@@ -621,7 +836,7 @@ app.get('/api/health', (req, res) => {
     services: {
       database: 'MongoDB Atlas',
       uploads: 'Active',
-      features: ['Inquiries', 'Announcements', 'Schools Gallery']
+      features: ['Inquiries', 'Announcements', 'Schools Gallery', 'Reviews']
     }
   });
 });
@@ -642,6 +857,10 @@ app.get('/', (req, res) => {
       'POST /api/schools': 'Create new school (with image upload)',
       'PUT /api/schools/:id': 'Update school',
       'DELETE /api/schools/:id': 'Delete school',
+      'GET /api/reviews': 'Get all reviews',
+      'POST /api/reviews': 'Create new review',
+      'PUT /api/reviews/:id': 'Update review',
+      'DELETE /api/reviews/:id': 'Delete review',
       'GET /api/health': 'Server health check'
     }
   });
@@ -675,5 +894,6 @@ server.listen(PORT, () => {
   console.log(`📧 Inquiry API available at http://localhost:${PORT}/api/inquiries`);
   console.log(`📢 Announcements API available at http://localhost:${PORT}/api/announcements`);
   console.log(`🏫 Schools Gallery API available at http://localhost:${PORT}/api/schools`);
+  console.log(`⭐ Reviews API available at http://localhost:${PORT}/api/reviews`);
   console.log(`🖼️ Uploads served from http://localhost:${PORT}/uploads/`);
 });

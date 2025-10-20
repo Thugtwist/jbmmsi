@@ -1729,6 +1729,240 @@ footer {
   line-height: 1.5;
 }
 
+/* Reviews Component Styles */
+.reviews-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Arial', sans-serif;
+  position: relative;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.section-title span {
+  color: #3498db;
+}
+
+/* Add Review Button */
+.add-review-section {
+  text-align: center;
+  margin: 3rem 0;
+}
+
+.add-review-btn {
+  background: var(--gradient);
+  color: white;
+  border: none;
+  padding: 1.7rem 3rem;
+  border-radius: 15px;
+  font-size: 1.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--soft-glow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.add-review-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(67, 97, 238, 0.2), var(--neon-glow);
+}
+
+.add-review-btn:active {
+  transform: translateY(0);
+}
+
+.add-review-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.add-review-btn:hover::before {
+  left: 100%;
+}
+
+/* Reviews List Styles */
+.reviews-list {
+  margin-top: 3rem;
+}
+
+.reviews-list h3 {
+  color: var(--dark);
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.reviews-list > p {
+  text-align: center;
+  color: var(--text-light);
+  font-style: italic;
+  font-size: 1.6rem;
+  padding: 3rem;
+  background: rgba(67, 97, 238, 0.05);
+  border-radius: 15px;
+  border-left: 4px solid var(--primary);
+}
+
+/* Review Item Styles */
+.review-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: var(--transition);
+  animation: slideInUp 0.5s ease-out;
+  border-left: 4px solid var(--primary);
+}
+
+.review-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), var(--soft-glow);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.reviewer-name {
+  font-weight: 700;
+  color: var(--dark);
+  font-size: 1.7rem;
+}
+
+.review-date {
+  color: var(--text-light);
+  font-size: 1.4rem;
+  background: #f8fafc;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+
+.review-rating {
+  color: #f39c12;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 3px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rating-text {
+  color: var(--text-light);
+  font-size: 1.4rem;
+  font-weight: 600;
+  background: rgba(243, 156, 18, 0.1);
+  padding: 0.3rem 1rem;
+  border-radius: 8px;
+}
+
+.review-comment {
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1.5rem;
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border-left: 3px solid #e2e8f0;
+}
+
+/* Loading State */
+.reviews-container > div:first-child {
+  text-align: center;
+  font-size: 1.6rem;
+  color: var(--text-light);
+  padding: 3rem;
+  background: rgba(67, 97, 238, 0.05);
+  border-radius: 15px;
+  margin: 2rem 0;
+}
+
+/* Animation for new reviews */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .reviews-container {
+    padding: 1rem;
+  }
+  
+  .section-title {
+    font-size: 2.2rem;
+  }
+  
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .review-item {
+    padding: 2rem;
+  }
+  
+  .add-review-btn {
+    width: 100%;
+    max-width: 300px;
+    font-size: 1.6rem;
+    padding: 1.5rem 2rem;
+  }
+  
+  .reviews-list h3 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .review-item {
+    padding: 1.5rem;
+  }
+  
+  .reviewer-name {
+    font-size: 1.5rem;
+  }
+  
+  .review-comment {
+    font-size: 1.4rem;
+  }
+}
+
 /* ===== RESPONSIVE STYLES ===== */
 
 .connection-banner {

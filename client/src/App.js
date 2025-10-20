@@ -12,6 +12,7 @@ import Modal from './components/Modal.jsx';
 import SchoolsGallery from './components/SchoolsGallery.jsx';
 import NotificationCenter from './components/NotificationCenter.js';
 import { SocketProvider } from './context/SocketContext.js';
+import Reviews from './components/Reviews.jsx';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <SchoolsGallery />
       <Announcements />
       <About />
+      <Reviews />
       <Contact />
       <Footer />
       <Chatbot />
