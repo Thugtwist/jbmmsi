@@ -19,7 +19,7 @@ const Hero = () => {
     >
       <div className="container">
         <div className="hero-content">
-          <h1 className="hero-title">Jem Brillant Mind Montissori School Inc.</h1>
+          <h1 className="hero-title">Jem Brilliant Mind Montissori School Inc.</h1>
           <p className="hero-subtitle"> Provides quality education that nurtures young minds and prepares them for a bright future.</p>
           <a href="#programs" className="btn1">Explore Our Programs</a>
         </div>

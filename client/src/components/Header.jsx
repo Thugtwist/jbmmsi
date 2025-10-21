@@ -36,7 +36,7 @@ const Header = () => {
           <ul className={`nav-menu ${isMenuActive ? 'active' : ''}`}>
             <li className="nav-item"><a href="#hero" className="nav-link" onClick={closeMenu}>Home</a></li>
             <li className="nav-item"><a href="#programs" className="nav-link" onClick={closeMenu}>Programs</a></li>
-             <li className="nav-item"><a href="#gallery" className="nav-link" onClick={closeMenu}>Gallery</a></li>
+            
             <li className="nav-item"><a href="#announcements" className="nav-link" onClick={closeMenu}>Announcements</a></li>
             <li className="nav-item"><a href="#about" className="nav-link" onClick={closeMenu}>About Us</a></li>
             <li className="nav-item"><a href="#contact" className="nav-link" onClick={closeMenu}>Contact</a></li>
