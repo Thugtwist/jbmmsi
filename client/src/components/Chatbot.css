@@ -1,0 +1,177 @@
+/* Add these styles to your existing CSS */
+
+.categories-dropdown-container {
+  position: relative;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.categories-toggle {
+  width: 100%;
+  padding: 1.2rem 2rem;
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.categories-toggle:hover {
+  background: rgba(67, 97, 238, 0.05);
+  color: var(--primary);
+}
+
+.categories-toggle i {
+  font-size: 1.2rem;
+  transition: var(--transition);
+}
+
+.categories-dropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 10;
+  animation: dropdownSlide 0.3s ease;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.2rem 2rem;
+  background: white;
+  border: none;
+  color: var(--text);
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.category-item:last-child {
+  border-bottom: none;
+}
+
+.category-item:hover {
+  background: var(--gradient);
+  color: white;
+  transform: translateX(5px);
+}
+
+.category-item:hover .category-item-icon {
+  transform: scale(1.2);
+}
+
+.category-item-icon {
+  font-size: 1.6rem;
+  width: 30px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.category-item-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* Remove the old categories styles */
+.faq-categories,
+.categories-grid,
+.category-btn {
+  display: none;
+}
+
+/* Improve message area to accommodate dropdown */
+.chat-messages {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: #f8fafc;
+}
+
+/* Adjust input area */
+.chat-input {
+  display: flex;
+  padding: 2rem;
+  background: white;
+  gap: 1rem;
+}
+
+/* Scrollbar for dropdown */
+.categories-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.categories-dropdown::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.categories-dropdown::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+  opacity: 0.3;
+}
+
+.categories-dropdown::-webkit-scrollbar-thumb:hover {
+  opacity: 0.5;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .categories-dropdown {
+    max-height: 250px;
+  }
+  
+  .category-item {
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .category-item-icon {
+    font-size: 1.4rem;
+    width: 25px;
+  }
+  
+  .categories-toggle {
+    padding: 1rem 1.5rem;
+    font-size: 1.3rem;
+  }
+}
+
+/* Ensure proper spacing when dropdown is open */
+.chatbox.active .chat-messages {
+  padding-bottom: 0;
+}
